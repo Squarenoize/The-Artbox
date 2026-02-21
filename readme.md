@@ -59,3 +59,5 @@ CREATE DATABASE artbox CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 2. Importer la structure à l'aide du fichier schema.sql 
 
 3. Importer les données initiales à l'aide du fichier works.sql
+
+

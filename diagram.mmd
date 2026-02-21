@@ -1,0 +1,45 @@
+classDiagram
+
+class Database {
+  - PDO connection
+  + connect()
+  + getConnection()
+}
+
+class Artwork {
+  - int id
+  - string title
+  - string author
+  - string imagePath
+  - text description
+  + __construct()
+}
+
+class ArtworkModel {
+  - Database db
+  + findAll()
+  + findById(id)
+  + create(artwork)
+  + update(artwork)
+  + delete(id)
+}
+
+class ArtworkController {
+  - ArtworkModel model
+  - Verification verifier
+  + fetchAll()
+  + getArtwork(id)
+  + create()
+  + update(id)
+  + delete(id)
+}
+
+class Verification {
+  + verifyImage(file)
+  + verifyText(text)
+}
+
+Database --> ArtworkModel
+ArtworkModel --> Artwork
+ArtworkController --> ArtworkModel
+ArtworkController --> Verification
