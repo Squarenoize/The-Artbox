@@ -12,7 +12,7 @@
                             <h2><?= $oeuvre['title']; ?></h2>
                             <p class="description"><?= $oeuvre['artist']; ?></p>
                         </a>
-                    </article>';
+                    </article>
             <?php
             }
             ?>
