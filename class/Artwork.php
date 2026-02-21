@@ -8,11 +8,11 @@ class Artwork {
     
 
     public function __construct(array $data) {
-        $this->id = $data['id'] ?? null;
-        $this->title = $data['title'] ?? null;
-        $this->artist = $data['artist'] ?? null;
-        $this->photo = $data['photo'] ?? null;
-        $this->description = $data['description'] ?? null;
+        $this->id = $data['work_id'] ?? null;
+        $this->title = $data['work_title'] ?? null;
+        $this->artist = $data['work_artist'] ?? null;
+        $this->photo = $data['work_photo_path'] ?? null;
+        $this->description = $data['work_desc'] ?? null;
         
     }
 

@@ -1,5 +1,5 @@
 <?php
-$oeuvres = include 'oeuvres.php';
+require_once __DIR__ . '/class/ArtworkController.php';
 
 if (!isset($_GET['id']) || !ctype_digit($_GET['id'])) {
     ?>
@@ -8,22 +8,24 @@ if (!isset($_GET['id']) || !ctype_digit($_GET['id'])) {
 }
 
 $id = intval($_GET['id']);
+$controller = new ArtworkController();
+$artwork = $controller->getArtwork($id);
 
-if(!isset($oeuvres[$id])) {
+$id = intval($_GET['id']);
+
+if(!$artwork || $artwork->getId() !== $id) {
     ?>
     <span class="error">Oeuvre non trouvée.</span>
     <?php return;
 }
-
-$oeuvre = $oeuvres[$id];
  
 include_once 'includes/header.php';
 ?>
     <article class="oeuvre-detail">
-        <img src="<?php echo htmlspecialchars($oeuvre['img']); ?>" alt="<?php echo htmlspecialchars($oeuvre['title']); ?>">
-        <h1><?php echo htmlspecialchars($oeuvre['title']); ?></h1>
-        <h2><?php echo htmlspecialchars($oeuvre['artist']); ?></h2>
-        <p><?php echo htmlspecialchars($oeuvre['description']); ?></p>
+        <img src="<?php echo htmlspecialchars($artwork->getPhoto()); ?>" alt="<?php echo htmlspecialchars($artwork->getTitle()); ?>">
+        <h1><?php echo htmlspecialchars($artwork->getTitle()); ?></h1>
+        <h2><?php echo htmlspecialchars($artwork->getArtist()); ?></h2>
+        <p><?php echo htmlspecialchars($artwork->getDescription()); ?></p>
     </article>
 <?php 
 include_once 'includes/footer.php'; 

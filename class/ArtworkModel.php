@@ -12,8 +12,15 @@ class ArtworkModel {
     public function findAll() {
         try {
             $stmt = $this->db->query
-            ("SELECT * FROM artworks");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            ("SELECT * FROM works");
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $artworks = [];
+            foreach ($result as $data) {
+                $artworks[] = new Artwork($data);
+            }
+            return $artworks;
+
         } catch (PDOException $e) {
             echo "Error fetching artworks: " . $e->getMessage();
             return [];
@@ -23,10 +30,16 @@ class ArtworkModel {
     public function findById($id) {
         try {
             $stmt = $this->db->prepare
-            ("SELECT * FROM artworks WHERE id = :id");
+            ("SELECT * FROM works WHERE work_id = :id");
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($data) {
+                return new Artwork($data);
+            } else {
+                return null;
+            }
         } catch (PDOException $e) {
             echo "Error fetching artwork by ID: " . $e->getMessage();
             return null;
@@ -36,7 +49,7 @@ class ArtworkModel {
     public function create(Artwork $artwork) {
         try {
             $stmt = $this->db->prepare
-            ("INSERT INTO artworks (title, artist, photo, description) 
+            ("INSERT INTO works (title, artist, photo, description) 
             VALUES (:title, :artist, :photo, :description)");
             $stmt->bindParam(':title', $artwork->getTitle());
             $stmt->bindParam(':artist', $artwork->getArtist());
