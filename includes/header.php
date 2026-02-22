@@ -16,5 +16,8 @@
                 <ul>
                     <li><a href="index.php">Accueil</a></li>
                 </ul>
+                <ul>
+                    <li><a href="dashboard.php">Dashboard</a></li>
+                </ul>
             </nav>
         </header>

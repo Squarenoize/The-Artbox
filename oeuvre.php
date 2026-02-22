@@ -8,10 +8,9 @@ if (!isset($_GET['id']) || !ctype_digit($_GET['id'])) {
 }
 
 $id = intval($_GET['id']);
+
 $controller = new ArtworkController();
 $artwork = $controller->getArtwork($id);
-
-$id = intval($_GET['id']);
 
 if(!$artwork || $artwork->getId() !== $id) {
     ?>

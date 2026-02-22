@@ -27,10 +27,20 @@ header {
     width: 260px;
 }
 
+nav {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
 header ul {
     list-style: none;
     padding: 0;
     margin: 0;
+}
+
+header a:hover {
+    color: #555;
 }
 
 main {
@@ -96,6 +106,54 @@ footer {
 
 #contenu-oeuvre {
     max-width: 470px;
+}
+
+.dashboard-header ul {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.dashboard-header li {
+    flex: 1;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.dashboard-header a {
+    border: 1px solid #531111;
+    padding: 10px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform: scale(1);
+    transition: transform 0.2s ease;
+}
+
+.dashboard-header a:hover {
+    background-color: #531111;
+    color: white;
+        transform: scale(1.05);
+}
+
+.dashboard-header a.active {
+    background-color: #531111;
+    color: white;
+    font-weight: 600;
+}
+
+.dashboard-header a:active {
+    transform: scale(0.95);
+}
+
+.dashboard-content {
+    border: 1px solid #ddd;
+    min-height:450px;
+    padding: 15px;
 }
 
 @media (max-width: 850px) {
