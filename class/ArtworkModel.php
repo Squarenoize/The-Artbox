@@ -61,4 +61,21 @@ class ArtworkModel {
             return false;
         }
     }
+
+    public function update(Artwork $artwork) {
+        try {
+            $stmt = $this->db->prepare
+            ("UPDATE works SET title = :title, artist = :artist, photo = :photo, description = :description 
+            WHERE work_id = :id");
+            $stmt->bindParam(':id', $artwork->getId(), PDO::PARAM_INT);
+            $stmt->bindParam(':title', $artwork->getTitle());
+            $stmt->bindParam(':artist', $artwork->getArtist());
+            $stmt->bindParam(':photo', $artwork->getPhoto());
+            $stmt->bindParam(':description', $artwork->getDescription());
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            echo "Error updating artwork: " . $e->getMessage();
+            return false;
+        }
+    }
 }
