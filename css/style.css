@@ -126,6 +126,7 @@ footer {
 
 .dashboard-header a {
     border: 1px solid #531111;
+    background-color: #53111128;
     padding: 10px;
     display: block;
     width: 100%;

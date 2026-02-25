@@ -49,12 +49,12 @@ class ArtworkModel {
     public function create(Artwork $artwork) {
         try {
             $stmt = $this->db->prepare
-            ("INSERT INTO works (title, artist, photo, description) 
+            ("INSERT INTO works (work_title, work_artist, work_photo_path, work_desc) 
             VALUES (:title, :artist, :photo, :description)");
-            $stmt->bindParam(':title', $artwork->getTitle());
-            $stmt->bindParam(':artist', $artwork->getArtist());
-            $stmt->bindParam(':photo', $artwork->getPhoto());
-            $stmt->bindParam(':description', $artwork->getDescription());
+            $stmt->bindValue(':title', $artwork->getTitle());
+            $stmt->bindValue(':artist', $artwork->getArtist());
+            $stmt->bindValue(':photo', $artwork->getPhoto());
+            $stmt->bindValue(':description', $artwork->getDescription());
             return $stmt->execute();
         } catch (PDOException $e) {
             echo "Error creating artwork: " . $e->getMessage();
@@ -65,16 +65,28 @@ class ArtworkModel {
     public function update(Artwork $artwork) {
         try {
             $stmt = $this->db->prepare
-            ("UPDATE works SET title = :title, artist = :artist, photo = :photo, description = :description 
+            ("UPDATE works SET work_title = :title, work_artist = :artist, work_photo_path = :photo, work_desc = :description 
             WHERE work_id = :id");
-            $stmt->bindParam(':id', $artwork->getId(), PDO::PARAM_INT);
-            $stmt->bindParam(':title', $artwork->getTitle());
-            $stmt->bindParam(':artist', $artwork->getArtist());
-            $stmt->bindParam(':photo', $artwork->getPhoto());
-            $stmt->bindParam(':description', $artwork->getDescription());
+            $stmt->bindValue(':id', $artwork->getId(), PDO::PARAM_INT);
+            $stmt->bindValue(':title', $artwork->getTitle());
+            $stmt->bindValue(':artist', $artwork->getArtist());
+            $stmt->bindValue(':photo', $artwork->getPhoto());
+            $stmt->bindValue(':description', $artwork->getDescription());
             return $stmt->execute();
         } catch (PDOException $e) {
             echo "Error updating artwork: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    public function delete($id) {
+        try {
+            $stmt = $this->db->prepare
+            ("DELETE FROM works WHERE work_id = :id");
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            echo "Error deleting artwork: " . $e->getMessage();
             return false;
         }
     }

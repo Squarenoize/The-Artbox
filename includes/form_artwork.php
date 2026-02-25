@@ -22,13 +22,13 @@ $submitLabel = $isEditMode ? "Mettre à jour l'œuvre" : "Ajouter l'œuvre";
         <div class="form-row">
             <div class="form-group">
                 <label for="title">Titre de l'œuvre</label>
-                <input type="text" id="title" name="title" class="form-input" placeholder="Ex: La Joconde" 
+                <input type="text" id="title" name="title" class="form-input" placeholder="Ex: La Joconde" minlength="1" maxlength="100"
                     value="<?= $isEditMode ? htmlspecialchars($artwork->getTitle()) : '' ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="artist">Artiste</label>
-                <input type="text" id="artist" name="artist" class="form-input" placeholder="Ex: Léonard de Vinci" 
+                <input type="text" id="artist" name="artist" class="form-input" placeholder="Ex: Léonard de Vinci" minlength="2" maxlength="100"
                     value="<?= $isEditMode ? htmlspecialchars($artwork->getArtist()) : '' ?>" required>
             </div>
         </div>
@@ -40,7 +40,7 @@ $submitLabel = $isEditMode ? "Mettre à jour l'œuvre" : "Ajouter l'œuvre";
 
         <div class="form-group">
             <label for="description">Description</label>
-            <textarea id="description" name="description" class="form-textarea" rows="9" placeholder="Décrivez l'œuvre..."><?= $isEditMode ? htmlspecialchars($artwork->getDescription()) : '' ?></textarea>
+            <textarea id="description" name="description" class="form-textarea" rows="9" placeholder="Décrivez l'œuvre..." minlength="1" maxlength="1000"><?= $isEditMode ? htmlspecialchars($artwork->getDescription()) : '' ?></textarea>
         </div>
     </div>
     <div class="form-actions">
