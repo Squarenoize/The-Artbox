@@ -37,7 +37,7 @@ switch ($action) {
         } else {
             $artwork = $controller->getArtwork($artworkId);
             if (!$artwork) {
-                echo "<div class='dashboard-message error'>Œuvre introuvable.</div>";
+                echo "<div class='dashboard-message error'>Oeuvre introuvable.</div>";
                 include_once 'includes/artwork_list.php';
                 break;
             }
@@ -64,7 +64,7 @@ switch ($action) {
         }
         break;
     default:
-        echo "<div class='dashboard-message info'>Veuillez sélectionner une action dans le menu ci-dessus pour gérer vos œuvres d'art.</div>";
+        echo "<div class='dashboard-message info'>Veuillez sélectionner une action dans le menu ci-dessus pour gérer vos oeuvres d'art.</div>";
         break;
 }
 ?>

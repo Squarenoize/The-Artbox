@@ -22,7 +22,7 @@ class ArtworkModel {
             return $artworks;
 
         } catch (PDOException $e) {
-            echo "Error fetching artworks: " . $e->getMessage();
+            error_log("Error fetching artworks: " . $e->getMessage());
             return [];
         }
     }
@@ -41,7 +41,7 @@ class ArtworkModel {
                 return null;
             }
         } catch (PDOException $e) {
-            echo "Error fetching artwork by ID: " . $e->getMessage();
+            error_log("Error fetching artwork by ID: " . $e->getMessage());
             return null;
         }
     }
@@ -57,7 +57,7 @@ class ArtworkModel {
             $stmt->bindValue(':description', $artwork->getDescription());
             return $stmt->execute();
         } catch (PDOException $e) {
-            echo "Error creating artwork: " . $e->getMessage();
+            error_log("Error creating artwork: " . $e->getMessage());
             return false;
         }
     }
@@ -103,7 +103,7 @@ class ArtworkModel {
 
             return $stmt->execute();
         } catch (PDOException $e) {
-            echo "Error updating artwork: " . $e->getMessage();
+            error_log("Error updating artwork: " . $e->getMessage());
             return false;
         }
     }
@@ -115,7 +115,7 @@ class ArtworkModel {
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             return $stmt->execute();
         } catch (PDOException $e) {
-            echo "Error deleting artwork: " . $e->getMessage();
+            error_log("Error deleting artwork: " . $e->getMessage());
             return false;
         }
     }
