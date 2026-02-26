@@ -9,11 +9,19 @@ class Artwork {
 
     public function __construct(array $data) {
         $this->id = $data['work_id'] ?? null;
-        $this->title = $data['work_title'] ?? null;
-        $this->artist = $data['work_artist'] ?? null;
-        $this->photo = $data['work_photo_path'] ?? null;
-        $this->description = $data['work_desc'] ?? null;
-        
+
+        if (isset($data['work_title'])) {
+            $this->title = $data['work_title'];
+        }
+        if (isset($data['work_artist'])) {
+            $this->artist = $data['work_artist'];
+        }
+        if (isset($data['work_desc'])) {
+            $this->description = $data['work_desc'];
+        }
+        if (isset($data['work_photo_path'])) {
+            $this->photo = $data['work_photo_path'];
+        }
     }
 
     // Setters

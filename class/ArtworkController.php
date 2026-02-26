@@ -34,7 +34,7 @@ class ArtworkController {
                 // Sauvegarder l'image
                 $photoPath = $this->uploadNewPhoto($photo);
                 if (!$photoPath) {
-                    echo "Erreur lors de l'upload de l'image.";
+                    echo "<div class='dashboard-message error'>Erreur lors de l'upload de l'image.</div>";
                     return false;
                 }
 
@@ -47,15 +47,15 @@ class ArtworkController {
                 ]);
 
                 if ($this->artworkModel->create($artwork)) {
-                    echo "<div class='success-message'>Œuvre créée avec succès !</div>";
+                    echo "<div class='dashboard-message success'>Oeuvre créée avec succès !</div>";
                     return true;
                 } else {
-                    echo "<div class='error-message'>Erreur lors de la création de l'œuvre.</div>";
+                    echo "<div class='dashboard-message error'>Erreur lors de la création de l'oeuvre.</div>";
                     return false;
                 }
                 // ...
             } else {
-                echo "Invalid input data.";
+                echo "<div class='dashboard-message error'>Données invalides.</div>";
             }
         }
     }
@@ -69,14 +69,14 @@ class ArtworkController {
             $description = $_POST['description'] ?? '';
 
             if (!$id) {
-                echo "Invalid artwork ID.";
+                echo "<div class='dashboard-message error'>ID de l'oeuvre invalide.</div>";
                 return false;
             }
 
-            // Récupérer l'œuvre existante
+            // Récupérer l'oeuvre existante
             $existingArtwork = $this->artworkModel->findById($id);
             if (!$existingArtwork) {
-                echo "Œuvre introuvable.";
+                echo "<div class='dashboard-message error'>oeuvre introuvable.</div>";
                 return false;
             }
 
@@ -94,35 +94,53 @@ class ArtworkController {
                         // Upload de la nouvelle photo
                         $photoPath = $this->uploadNewPhoto($photo);
                         if (!$photoPath) {
-                            echo "Erreur lors de l'upload de la nouvelle image.";
+                            echo "<div class='dashboard-message error'>Erreur lors de l'upload de la nouvelle image.</div>";
                             return false;
                         }
                         // Supprimer l'ancienne photo
                         $this->deletePhoto($existingArtwork->getPhoto());
                     } else {
-                        echo "Fichier image invalide.";
+                        echo "<div class='dashboard-message error'>Fichier image invalide.</div>";
                         return false;
                     }
                 }
 
-                // Créer un objet Artwork mis à jour
-                $updatedArtwork = new Artwork([
-                    'work_id' => $id,
-                    'work_title' => $title,
-                    'work_artist' => $artist,
-                    'work_photo_path' => $photoPath,
-                    'work_desc' => $description
-                ]);
+                // Créer un tableau avec l'ID obligatoire et les champs modifiés
+                $dataToUpdate = ['work_id' => $id];
+                
+                if ($title !== $existingArtwork->getTitle()) {
+                    $dataToUpdate['work_title'] = $title;
+                }
+
+                if ($artist !== $existingArtwork->getArtist()) {
+                    $dataToUpdate['work_artist'] = $artist;
+                }
+
+                if ($photoPath !== $existingArtwork->getPhoto()) {
+                    $dataToUpdate['work_photo_path'] = $photoPath;
+                }
+
+                if ($description !== $existingArtwork->getDescription()) {
+                    $dataToUpdate['work_desc'] = $description;
+                }
+
+                // Si seul l'ID est présent, aucune modification
+                if (count($dataToUpdate) === 1) {
+                    echo "<div class='dashboard-message info'>Aucune modification détectée.</div>";
+                    return false;
+                }
+
+                $updatedArtwork = new Artwork($dataToUpdate);
 
                 if ($this->artworkModel->update($updatedArtwork)) {
-                    echo "<div class='success-message'>Œuvre mise à jour avec succès !</div>";
+                    echo "<div class='dashboard-message success'>Oeuvre mise à jour avec succès !</div>";
                     return true;
                 } else {
-                    echo "<div class='error-message'>Erreur lors de la mise à jour.</div>";
+                    echo "<div class='dashboard-message error'>Erreur lors de la mise à jour de l'oeuvre.</div>";
                     return false;
                 }
             } else {
-                echo "Données invalides.";
+                echo "<div class='dashboard-message error'>Données invalides.</div>";
                 return false;
             }
         }
@@ -132,22 +150,24 @@ class ArtworkController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_GET['id'] ?? null;
             if (!$id) {
-                echo "Invalid artwork ID given.";
+                echo "<div class='dashboard-message error'>ID de l'oeuvre invalide.</div>";
                 return false;
             }
 
-            // Récupérer l'œuvre existante
+            // Récupérer l'oeuvre existante
             $existingArtwork = $this->artworkModel->findById($id);
             if (!$existingArtwork) {
-                echo "Œuvre introuvable.";
+                echo "<div class='dashboard-message error'>Oeuvre introuvable.</div>";
                 return false;
             }
 
             if ($this->artworkModel->delete($id)) {
                 // Supprimer la photo associée
                 $this->deletePhoto($existingArtwork->getPhoto());
-                echo "Œuvre supprimée avec succès !";
+                echo "<div class='dashboard-message success'>Oeuvre supprimée avec succès !</div>";
+                return true;
             } else {
+                echo "<div class='dashboard-message error'>Erreur lors de la suppression de l'oeuvre.</div>";
                 return false;
             }
         }

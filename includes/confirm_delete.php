@@ -1,17 +1,4 @@
 <?php
-if (!$artwork) {
-    ?>
-    <div class="delete-container">
-        <img src="assets/404.png" alt="Œuvre introuvable" class="art-preview">
-        <div>
-            <h2>Œuvre introuvable</h2>
-            <p>Désolé, l'œuvre que vous essayez de supprimer n'existe pas ou a déjà été supprimée.</p>
-            <a href='dashboard.php?action=delete_artwork' class='btn-cancel'>Retour à la liste</a>
-        </div>
-    </div>
-    <?php
-    return;
-}
 ?>
 <div class="delete-container">
     <img src="<?= htmlspecialchars($artwork->getPhoto()) ?>" alt="<?= htmlspecialchars($artwork->getTitle()) ?>" class="art-preview">

@@ -36,12 +36,21 @@ switch ($action) {
             include_once 'includes/artwork_list.php';
         } else {
             $artwork = $controller->getArtwork($artworkId);
+            if (!$artwork) {
+                echo "<div class='dashboard-message error'>Œuvre introuvable.</div>";
+                include_once 'includes/artwork_list.php';
+                break;
+            }
             include_once 'includes/form_artwork.php';
         }
         break;
     case 'delete_artwork':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $controller->delete();
+           $deleteSuccess = $controller->delete();
+           if ($deleteSuccess) {
+               header("Location: dashboard.php?action=delete_artwork");
+               exit;
+           }
         }
 
         $artworkId = $_GET['id'] ?? null;
@@ -55,7 +64,7 @@ switch ($action) {
         }
         break;
     default:
-        echo "<p>Veuillez sélectionner une action dans le menu ci-dessus pour gérer vos œuvres d'art.</p>";
+        echo "<div class='dashboard-message info'>Veuillez sélectionner une action dans le menu ci-dessus pour gérer vos œuvres d'art.</div>";
         break;
 }
 ?>

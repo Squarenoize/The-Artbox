@@ -2,7 +2,7 @@
 $action = $_GET['action'];
 $artworks = $controller->fetchAll();
 ?>
-<p>Veuillez sélectionner une œuvre à <?= $action === 'update_artworks' ? "mettre à jour" : "supprimer" ?>.</p>
+<p>Veuillez sélectionner une oeuvre à <?= $action === 'update_artworks' ? "mettre à jour" : "supprimer" ?>.</p>
 <?php
 foreach ($artworks as $artwork) {
     ?>

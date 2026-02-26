@@ -64,14 +64,43 @@ class ArtworkModel {
 
     public function update(Artwork $artwork) {
         try {
-            $stmt = $this->db->prepare
-            ("UPDATE works SET work_title = :title, work_artist = :artist, work_photo_path = :photo, work_desc = :description 
-            WHERE work_id = :id");
-            $stmt->bindValue(':id', $artwork->getId(), PDO::PARAM_INT);
-            $stmt->bindValue(':title', $artwork->getTitle());
-            $stmt->bindValue(':artist', $artwork->getArtist());
-            $stmt->bindValue(':photo', $artwork->getPhoto());
-            $stmt->bindValue(':description', $artwork->getDescription());
+            // Construire dynamiquement la requête SQL
+            $fields = [];
+            $params = [':id' => $artwork->getId()];
+
+            if ($artwork->getTitle() !== null) {
+                $fields[] = "work_title = :title";
+                $params[':title'] = $artwork->getTitle();
+            }
+
+            if ($artwork->getArtist() !== null) {
+                $fields[] = "work_artist = :artist";
+                $params[':artist'] = $artwork->getArtist();
+            }
+
+            if ($artwork->getPhoto() !== null) {
+                $fields[] = "work_photo_path = :photo";
+                $params[':photo'] = $artwork->getPhoto();
+            }
+
+            if ($artwork->getDescription() !== null) {
+                $fields[] = "work_desc = :description";
+                $params[':description'] = $artwork->getDescription();
+            }
+
+            // Si aucun champ à mettre à jour
+            if (empty($fields)) {
+                return true;
+            }
+
+            // Construire et exécuter la requête
+            $sql = "UPDATE works SET " . implode(', ', $fields) . " WHERE work_id = :id";
+            $stmt = $this->db->prepare($sql);
+            
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value);
+            }
+
             return $stmt->execute();
         } catch (PDOException $e) {
             echo "Error updating artwork: " . $e->getMessage();
