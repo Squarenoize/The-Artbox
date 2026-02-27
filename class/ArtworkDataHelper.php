@@ -27,8 +27,8 @@ class ArtworkDataHelper {
             case 'add_artwork':
                 $this->handleAddArtwork();
                 break;
-            case 'update_artworks':
-                $this->handleUpdateArtworks();
+            case 'update_artwork':
+                $this->handleUpdateArtwork();
                 break;
             case 'delete_artwork':
                 $this->handleDeleteArtwork();
@@ -44,7 +44,17 @@ class ArtworkDataHelper {
      */
     private function handleAddArtwork() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $result = $this->artworkManager->create();
+
+            $data = [
+                'title' => $_POST['title'] ?? '',
+                'artist' => $_POST['artist'] ?? '',
+                'description' => $_POST['description'] ?? ''
+            ];
+
+            $photo = $_FILES['photo'] ?? null;
+
+            $result = $this->artworkManager->create($data, $photo);
+
             $this->displayMessage($result);
         }
         include_once __DIR__ . '/../includes/form_artwork.php';
@@ -55,29 +65,48 @@ class ArtworkDataHelper {
      */
     private function handleUpdateArtworks() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $result = $this->artworkManager->update();
-            $this->displayMessage($result);
+            $this->processUpdate();
+            return;
         }
-        
+
+        $this->showUpdatePage();
+    }
+
+    private function processUpdate() {
+        $data = [
+            'id' => $_POST['id'] ?? null,
+            'title' => $_POST['title'] ?? '',
+            'artist' => $_POST['artist'] ?? '',
+            'description' => $_POST['description'] ?? ''
+        ];
+
+        $photo = $_FILES['photo'] ?? null;
+
+        $result = $this->artworkManager->update($data, $photo);
+        $this->displayMessage($result);
+    }
+
+    private function showUpdatePage() {
         $artworkId = $_GET['id'] ?? null;
 
-        if (!$artworkId) {
-            // Préparer les données pour la vue
-            $action = $_GET['action'];
-            $artworks = $this->artworkManager->fetchAll();
-            include_once __DIR__ . '/../includes/artwork_list.php';
-        } else {
-            // Récupérer l'oeuvre et afficher le formulaire
-            $artwork = $this->artworkManager->getArtwork($artworkId);
-            if (!$artwork) {
-                echo "<div class='dashboard-message error'>Oeuvre introuvable.</div>";
-                $action = $_GET['action'];
-                $artworks = $this->artworkManager->fetchAll();
-                include_once __DIR__ . '/../includes/artwork_list.php';
-            } else {
-                include_once __DIR__ . '/../includes/form_artwork.php';
-            }
+        if (!ctype_digit($artworkId)) {
+            die("ID invalide");
         }
+
+        if (!$artworkId) {
+            $artworks = $this->artworkManager->fetchAll();
+            include '../includes/artwork_list.php';
+            return;
+        }
+
+        $artwork = $this->artworkManager->getArtwork($artworkId);
+
+        if (!$artwork) {
+            echo "<div class='dashboard-message error'>Oeuvre introuvable.</div>";
+            return;
+        }
+
+        include '../includes/form_artwork.php';
     }
 
     /**
@@ -85,7 +114,15 @@ class ArtworkDataHelper {
      */
     private function handleDeleteArtwork() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $result = $this->artworkManager->delete();
+
+            $id = $_POST['id'] ?? null;
+            if (!$id) {
+                echo "<div class='dashboard-message error'>ID de l'oeuvre invalide.</div>";
+                return;
+            }
+
+            $result = $this->artworkManager->delete($id);
+
             if ($result['success']) {
                 header("Location: dashboard.php?action=delete_artwork");
                 exit;

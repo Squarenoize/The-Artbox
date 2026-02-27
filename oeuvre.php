@@ -21,10 +21,10 @@ if(!$artwork || $artwork->getId() !== $id) {
 include_once 'includes/header.php';
 ?>
     <article class="oeuvre-detail">
-        <img src="<?php echo htmlspecialchars($artwork->getPhoto()); ?>" alt="<?php echo htmlspecialchars($artwork->getTitle()); ?>">
-        <h1><?php echo htmlspecialchars($artwork->getTitle()); ?></h1>
-        <h2><?php echo htmlspecialchars($artwork->getArtist()); ?></h2>
-        <p><?php echo htmlspecialchars($artwork->getDescription()); ?></p>
+        <img src="<?php echo htmlspecialchars($artwork->getPhoto(), ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($artwork->getTitle(), ENT_QUOTES, 'UTF-8'); ?>">
+        <h1><?php echo htmlspecialchars($artwork->getTitle(), ENT_QUOTES, 'UTF-8'); ?></h1>
+        <h2><?php echo htmlspecialchars($artwork->getArtist(), ENT_QUOTES, 'UTF-8'); ?></h2>
+        <p><?php echo htmlspecialchars($artwork->getDescription(), ENT_QUOTES, 'UTF-8'); ?></p>
     </article>
 <?php 
 include_once 'includes/footer.php'; 

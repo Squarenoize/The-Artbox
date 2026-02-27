@@ -7,7 +7,6 @@ class Verification {
             return false;
         }
         $text = trim($text);
-        $text = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
         if (strlen($text) > $maxLength) {
             return false;
         }
@@ -26,6 +25,4 @@ class Verification {
         }
         return true;
     }
-
-    
 }
