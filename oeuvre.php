@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/class/ArtworkController.php';
+require_once __DIR__ . '/class/ArtworkDataHelper.php';
 
 if (!isset($_GET['id']) || !ctype_digit($_GET['id'])) {
     ?>
@@ -9,8 +9,8 @@ if (!isset($_GET['id']) || !ctype_digit($_GET['id'])) {
 
 $id = intval($_GET['id']);
 
-$controller = new ArtworkController();
-$artwork = $controller->getArtwork($id);
+$dataHelper = new ArtworkDataHelper();
+$artwork = $dataHelper->getArtwork($id);
 
 if(!$artwork || $artwork->getId() !== $id) {
     ?>

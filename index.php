@@ -1,11 +1,11 @@
 
     <?php
-    require_once __DIR__ . '/class/ArtworkController.php';
+    require_once __DIR__ . '/class/ArtworkDataHelper.php';
     include_once 'includes/header.php'; ?>
         <div id="liste-oeuvres">
             <?php
-            $controller = new ArtworkController();
-            $artworks = $controller->fetchAll();
+            $dataHelper = new ArtworkDataHelper();
+            $artworks = $dataHelper->fetchAll();
             foreach ($artworks as $artwork) {
                 ?>
                 <article class="oeuvre">

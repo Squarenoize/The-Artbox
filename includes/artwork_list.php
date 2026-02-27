@@ -1,6 +1,5 @@
 <?php
-$action = $_GET['action'];
-$artworks = $controller->fetchAll();
+// Les variables $action et $artworks sont préparées par le DataHelper
 ?>
 <p>Veuillez sélectionner une oeuvre à <?= $action === 'update_artworks' ? "mettre à jour" : "supprimer" ?>.</p>
 <?php

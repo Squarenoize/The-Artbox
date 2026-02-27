@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/Artwork.php';
 
-class ArtworkModel {
+class ArtworkDbTable {
     private $db;
 
     public function __construct() {

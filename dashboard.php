@@ -1,10 +1,10 @@
 <?php
 session_start();
-require_once __DIR__ . '/class/ArtworkController.php';
+require_once __DIR__ . '/class/ArtworkDataHelper.php';
 include_once 'includes/header.php';
 
 $action = $_GET['action'] ?? null;
-$controller = new ArtworkController();
+$dataHelper = new ArtworkDataHelper();
 
 ?>
 <div class="dashboard-header">
@@ -19,54 +19,8 @@ $controller = new ArtworkController();
 </div>
 <div class="dashboard-content">
 <?php
-switch ($action) {
-    case 'add_artwork':
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $controller->create();
-        }
-        include_once 'includes/form_artwork.php';
-        break;
-    case 'update_artworks':
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $controller->update();
-        }
-        $artworkId = $_GET['id'] ?? null;
-
-        if (!$artworkId) {
-            include_once 'includes/artwork_list.php';
-        } else {
-            $artwork = $controller->getArtwork($artworkId);
-            if (!$artwork) {
-                echo "<div class='dashboard-message error'>Oeuvre introuvable.</div>";
-                include_once 'includes/artwork_list.php';
-                break;
-            }
-            include_once 'includes/form_artwork.php';
-        }
-        break;
-    case 'delete_artwork':
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-           $deleteSuccess = $controller->delete();
-           if ($deleteSuccess) {
-               header("Location: dashboard.php?action=delete_artwork");
-               exit;
-           }
-        }
-
-        $artworkId = $_GET['id'] ?? null;
-        
-        if (!$artworkId) {
-            include_once 'includes/artwork_list.php';
-        } else {
-            $artwork = $controller->getArtwork($artworkId);
-            // confirmation de suppression
-            include_once 'includes/confirm_delete.php';
-        }
-        break;
-    default:
-        echo "<div class='dashboard-message info'>Veuillez sélectionner une action dans le menu ci-dessus pour gérer vos oeuvres d'art.</div>";
-        break;
-}
+// Toute la logique est gérée par le DataHelper
+$dataHelper->handleAction($action);
 ?>
 </div>
 <?php
