@@ -1,7 +1,7 @@
 <?php
 // Determine if we are in edit mode or add mode
 $isEditMode = isset($artwork) && $artwork !== null;
-$formAction = $isEditMode ? "dashboard.php?action=update_artworks&id=" . $artwork->getId() : "dashboard.php?action=add_artwork";
+$formAction = $isEditMode ? "dashboard.php?action=update_artwork&id=" . $artwork->getId() : "dashboard.php?action=add_artwork";
 $submitLabel = $isEditMode ? "Mettre à jour l'œuvre" : "Ajouter l'œuvre";
 ?>
 
@@ -47,7 +47,7 @@ $submitLabel = $isEditMode ? "Mettre à jour l'œuvre" : "Ajouter l'œuvre";
         <button type="submit" class="btn-submit"><?= $submitLabel ?></button>
         <button type="reset" class="btn-reset">Réinitialiser</button>
         <?php if ($isEditMode): ?>
-            <a href="dashboard.php?action=update_artworks" class="btn-cancel">Annuler</a>
+            <a href="dashboard.php?action=update_artwork" class="btn-cancel">Annuler</a>
         <?php endif; ?>
     </div>
 </form>

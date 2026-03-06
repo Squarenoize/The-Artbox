@@ -1,7 +1,7 @@
 <?php
 // The variables $action and $artworks are prepared by the DataHelper
 ?>
-<p>Veuillez sélectionner une oeuvre à <?= $action === 'update_artworks' ? "mettre à jour" : "supprimer" ?>.</p>
+<p>Veuillez sélectionner une oeuvre à <?= $action === 'update_artwork' ? "mettre à jour" : "supprimer" ?>.</p>
 <?php
 foreach ($artworks as $artwork) {
     ?>

@@ -63,7 +63,7 @@ class ArtworkDataHelper {
     /**
      * Handles updating artworks
      */
-    private function handleUpdateArtworks() {
+    private function handleUpdateArtwork() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->processUpdate();
             return;
@@ -84,19 +84,25 @@ class ArtworkDataHelper {
 
         $result = $this->artworkManager->update($data, $photo);
         $this->displayMessage($result);
+        
+        // Show the artwork list after update
+        $action = 'update_artwork';
+        $artworks = $this->artworkManager->fetchAll();
+        include __DIR__ . '/../includes/artwork_list.php';
     }
 
     private function showUpdatePage() {
         $artworkId = $_GET['id'] ?? null;
-
-        if (!ctype_digit($artworkId)) {
-            die("ID invalide");
-        }
+        $action = $_GET['action'] ?? 'update_artwork';
 
         if (!$artworkId) {
             $artworks = $this->artworkManager->fetchAll();
-            include '../includes/artwork_list.php';
+            include __DIR__ . '/../includes/artwork_list.php';
             return;
+        }
+
+        if (!ctype_digit($artworkId)) {
+            die("ID invalide");
         }
 
         $artwork = $this->artworkManager->getArtwork($artworkId);
@@ -106,7 +112,7 @@ class ArtworkDataHelper {
             return;
         }
 
-        include '../includes/form_artwork.php';
+        include __DIR__ . '/../includes/form_artwork.php';
     }
 
     /**
@@ -116,19 +122,13 @@ class ArtworkDataHelper {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $id = $_POST['id'] ?? null;
-            if (!$id) {
+            if (!isset($id) || $id === '' || !ctype_digit((string)$id)) {
                 echo "<div class='dashboard-message error'>ID de l'oeuvre invalide.</div>";
                 return;
             }
 
             $result = $this->artworkManager->delete($id);
-
-            if ($result['success']) {
-                header("Location: dashboard.php?action=delete_artwork");
-                exit;
-            } else {
-                $this->displayMessage($result);
-            }
+            $this->displayMessage($result);
         }
 
         $artworkId = $_GET['id'] ?? null;

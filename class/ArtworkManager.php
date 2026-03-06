@@ -124,8 +124,7 @@ class ArtworkManager {
     }
 
     public function delete($id) {
-        $id = $id ?? null;
-        if (!$id) {
+        if (!isset($id) || $id === '' || !ctype_digit((string)$id)) {
             return ['success' => false, 'message' => "ID de l'oeuvre invalide."];
         }
 
