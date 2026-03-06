@@ -1,5 +1,14 @@
 classDiagram
 
+class ArtworkDataHelper {
+  - ArtworkManager artworkManager
+  + __construct(ArtworkManager artworkManager)
+  + handleAction(action)
+  - handleAddArtwork()
+  - handleUpdateArtwork()
+  - handleDeleteArtwork()
+}
+
 class Database {
   - PDO connection
   + connect()
@@ -15,7 +24,7 @@ class Artwork {
   + __construct()
 }
 
-class ArtworkModel {
+class ArtworkDbTable {
   - Database db
   + findAll()
   + findById(id)
@@ -24,8 +33,8 @@ class ArtworkModel {
   + delete(id)
 }
 
-class ArtworkController {
-  - ArtworkModel model
+class ArtworkManager {
+  - ArtworkDbTable model
   - Verification verifier
   + fetchAll()
   + getArtwork(id)
@@ -39,7 +48,8 @@ class Verification {
   + verifyText(text)
 }
 
-Database --> ArtworkModel
-ArtworkModel --> Artwork
-ArtworkController --> ArtworkModel
-ArtworkController --> Verification
+Database --> ArtworkDbTable
+ArtworkDbTable --> Artwork
+ArtworkManager --> ArtworkDbTable
+ArtworkManager --> Verification
+ArtworkDataHelper --> ArtworkManager
