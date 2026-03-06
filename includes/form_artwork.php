@@ -1,5 +1,5 @@
 <?php
-// Déterminer si on est en mode édition ou ajout
+// Determine if we are in edit mode or add mode
 $isEditMode = isset($artwork) && $artwork !== null;
 $formAction = $isEditMode ? "dashboard.php?action=update_artworks&id=" . $artwork->getId() : "dashboard.php?action=add_artwork";
 $submitLabel = $isEditMode ? "Mettre à jour l'œuvre" : "Ajouter l'œuvre";

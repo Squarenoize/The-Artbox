@@ -9,7 +9,7 @@ class ArtworkDataHelper {
     }
 
     /**
-     * Affiche un message à l'utilisateur
+     * Displays a message to the user
      */
     private function displayMessage($result) {
         if (isset($result['message'])) {
@@ -19,8 +19,8 @@ class ArtworkDataHelper {
     }
 
     /**
-     * Gère toutes les actions du dashboard
-     * C'est la méthode principale appelée par la vue
+     * Handles all dashboard actions
+     * This is the main method called by the view
      */
     public function handleAction($action) {
         switch ($action) {
@@ -40,7 +40,7 @@ class ArtworkDataHelper {
     }
 
     /**
-     * Gère l'ajout d'une oeuvre
+     * Handles adding a new artwork
      */
     private function handleAddArtwork() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -61,7 +61,7 @@ class ArtworkDataHelper {
     }
 
     /**
-     * Gère la mise à jour des oeuvres
+     * Handles updating artworks
      */
     private function handleUpdateArtworks() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -110,7 +110,7 @@ class ArtworkDataHelper {
     }
 
     /**
-     * Gère la suppression d'une oeuvre
+     * Handle deleting an artwork
      */
     private function handleDeleteArtwork() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -134,12 +134,12 @@ class ArtworkDataHelper {
         $artworkId = $_GET['id'] ?? null;
         
         if (!$artworkId) {
-            // Préparer les données pour la vue
+            // Prepare data for the view
             $action = $_GET['action'];
             $artworks = $this->artworkManager->fetchAll();
             include_once __DIR__ . '/../includes/artwork_list.php';
         } else {
-            // Récupérer l'oeuvre et afficher la confirmation
+            // Fetch the artwork and show confirmation
             $artwork = $this->artworkManager->getArtwork($artworkId);
             if (!$artwork) {
                 echo "<div class='dashboard-message error'>Oeuvre introuvable.</div>";
@@ -153,21 +153,21 @@ class ArtworkDataHelper {
     }
 
     /**
-     * Gère le cas par défaut (aucune action)
+     * Handles the default case (no action)
      */
     private function handleDefault() {
         echo "<div class='dashboard-message info'>Veuillez sélectionner une action dans le menu ci-dessus pour gérer vos oeuvres d'art.</div>";
     }
 
     /**
-     * Récupère toutes les oeuvres (pour oeuvre.php et index.php)
+     * Fetches all artworks (for oeuvre.php and index.php)
      */
     public function fetchAll() {
         return $this->artworkManager->fetchAll();
     }
 
     /**
-     * Récupère une oeuvre par ID (pour oeuvre.php)
+     * Fetches an artwork by ID (for oeuvre.php)
      */
     public function getArtwork($id) {
         return $this->artworkManager->getArtwork($id);

@@ -60,7 +60,8 @@ class ArtworkManager {
             return ['success' => false, 'message' => "ID de l'oeuvre invalide."];
         }
 
-        // Récupérer l'oeuvre existante
+        
+        // Retrieve the existing artwork to compare changes and handle photo replacement if needed
         $existingArtwork = $this->artworkDbTable->findById($data['id']);
         if (!$existingArtwork) {
             return ['success' => false, 'message' => "Oeuvre introuvable."];
@@ -75,23 +76,21 @@ class ArtworkManager {
             return ['success' => false, 'message' => "Données invalides."];
         }
 
-        // Gérer la photo : si un nouveau fichier est uploadé, le valider
+        // Handling photo: if a new file is uploaded, validate it
         $photoPath = $existingArtwork->getPhoto();
         if ($photo && $photo['size'] > 0) {
             if ($this->verification->verifyImage($photo)) {
-                // Upload de la nouvelle photo
                 $photoPath = $this->uploadNewPhoto($photo);
                 if (!$photoPath) {
                     return ['success' => false, 'message' => "Erreur lors de l'upload de la nouvelle image."];
                 }
-                // Supprimer l'ancienne photo
                 $this->deletePhoto($existingArtwork->getPhoto());
             } else {
                 return ['success' => false, 'message' => "Fichier image invalide."];
             }
         }
 
-        // Créer un tableau avec l'ID obligatoire et les champs modifiés
+        // Create an array with the mandatory ID and the modified fields
         $dataToUpdate = ['work_id' => $data['id']];
         
         if ($title !== $existingArtwork->getTitle()) {
@@ -110,7 +109,7 @@ class ArtworkManager {
             $dataToUpdate['work_desc'] = $description;
         }
 
-        // Si seul l'ID est présent, aucune modification
+        // If only the ID is present, no modification
         if (count($dataToUpdate) === 1) {
             return ['success' => false, 'message' => "Aucune modification détectée.", 'type' => 'info'];
         }
@@ -130,14 +129,14 @@ class ArtworkManager {
             return ['success' => false, 'message' => "ID de l'oeuvre invalide."];
         }
 
-        // Récupérer l'oeuvre existante
+        // Retrieve the existing artwork
         $existingArtwork = $this->artworkDbTable->findById($id);
         if (!$existingArtwork) {
             return ['success' => false, 'message' => "Oeuvre introuvable."];
         }
 
         if ($this->artworkDbTable->delete($id)) {
-            // Supprimer la photo associée
+            // Delete the associated photo
             $this->deletePhoto($existingArtwork->getPhoto());
             return ['success' => true, 'message' => "Oeuvre supprimée avec succès !"];
         } else {

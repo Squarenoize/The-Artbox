@@ -9,6 +9,16 @@ class ArtworkDbTable {
         $this->db = Database::getInstance()->getConnection();
     }
 
+    /**
+     * Retrieves all artwork records from the database.
+     *
+     * Fetches all rows from the 'works' table and converts each row into an Artwork object.
+     *
+     * @return Artwork[] An array of Artwork objects representing all artworks in the database.
+     *                   Returns an empty array if an error occurs during the database query.
+     *
+     * @throws PDOException Caught internally and logged; does not propagate to caller.
+     */
     public function findAll() {
         try {
             $stmt = $this->db->query
@@ -27,6 +37,17 @@ class ArtworkDbTable {
         }
     }
 
+    /**
+     * Retrieves an artwork record by its ID from the database.
+     *
+     * @param int $id The unique identifier of the artwork to retrieve.
+     *
+     * @return Artwork|null Returns an Artwork object if the artwork is found,
+     *                      or null if the artwork does not exist or an error occurs.
+     *
+     * @throws void This method catches PDOException internally and logs errors
+     *              without re-throwing exceptions.
+     */
     public function findById($id) {
         try {
             $stmt = $this->db->prepare
@@ -46,6 +67,20 @@ class ArtworkDbTable {
         }
     }
 
+    /**
+     * Creates a new artwork record in the database.
+     *
+     * Inserts a new artwork entry into the 'works' table with the provided
+     * artwork information including title, artist, photo path, and description.
+     *
+     * @param Artwork $artwork The artwork object containing the data to be inserted.
+     *                         Must have valid getTitle(), getArtist(), getPhoto(),
+     *                         and getDescription() methods.
+     *
+     * @return bool True if the artwork was successfully created, false otherwise.
+     *
+     * @throws PDOException Caught internally and logged; does not propagate.
+     */
     public function create(Artwork $artwork) {
         try {
             $stmt = $this->db->prepare
@@ -62,9 +97,25 @@ class ArtworkDbTable {
         }
     }
 
+    /**
+     * Updates an existing artwork record in the database
+     *
+     * Dynamically builds and executes an UPDATE query based on which fields
+     * of the Artwork object are not null. Only non-null fields are included
+     * in the update to allow for partial updates.
+     *
+     * @param Artwork $artwork The artwork object containing the data to update.
+     *                          The object's ID is used to identify the record to update.
+     *                          Only non-null properties will be updated in the database.
+     *
+     * @return bool True if the update was successful or if no fields needed updating,
+     *              false if the update failed or a database error occurred.
+     *
+     * @throws PDOException Caught internally and logged; returns false instead of throwing.
+     */
     public function update(Artwork $artwork) {
         try {
-            // Construire dynamiquement la requête SQL
+            // Build dynamic SQL query based on non-null fields
             $fields = [];
             $params = [':id' => $artwork->getId()];
 
@@ -88,12 +139,12 @@ class ArtworkDbTable {
                 $params[':description'] = $artwork->getDescription();
             }
 
-            // Si aucun champ à mettre à jour
+            // If no fields to update
             if (empty($fields)) {
                 return true;
             }
 
-            // Construire et exécuter la requête
+            // Build and execute the query
             $sql = "UPDATE works SET " . implode(', ', $fields) . " WHERE work_id = :id";
             $stmt = $this->db->prepare($sql);
             
@@ -108,6 +159,13 @@ class ArtworkDbTable {
         }
     }
 
+    /**
+     * Deletes an artwork record from the database by its ID.
+     *
+     * @param int $id The ID of the artwork to delete
+     * @return bool Returns true if the deletion was successful, false otherwise
+     * @throws PDOException Caught and logged internally, returns false instead
+     */
     public function delete($id) {
         try {
             $stmt = $this->db->prepare
